@@ -88,6 +88,7 @@ Tanpa `MaterialApp`, widget seperti `Scaffold` atau `Navigator` tidak akan berfu
 Theme.of(context); // Mengambil tema saat ini
 Navigator.of(context).push(...); // Navigasi antar halaman
 ScaffoldMessenger.of(context).showSnackBar(...); // Menampilkan snackbar
+```
 
 # 📘 Flutter Navigation, Layouts, Forms, and Input Elements -- Tugas 8
 
@@ -133,6 +134,7 @@ Scaffold(
   ),
   body: const HomePageContent(),
 );
+```
 
 🧩 Kelebihan Menggunakan Layout Widget: Padding, SingleChildScrollView, dan ListView
 
@@ -234,6 +236,7 @@ Konsistensi Visual	Warna hijau dan putih digunakan di seluruh elemen seperti App
 Brand Identity	Hijau mencerminkan energi dan semangat olahraga, sesuai dengan tema toko perlengkapan sepak bola.
 User Experience	Warna yang seragam memudahkan pengguna mengenali aplikasi dan menciptakan kesan profesional.
 🧱 Contoh Implementasi di main.dart
+```dart
 MaterialApp(
   title: 'Football Shop',
   theme: ThemeData(
@@ -256,3 +259,6 @@ MaterialApp(
   ),
   home: HomePage(),
 );
+```
+
+
