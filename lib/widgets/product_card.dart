@@ -40,7 +40,20 @@ class ItemCard extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const ProductEntryListPage()
+                  builder: (context) => const ProductEntryListPage(
+                    endpointUrl: "http://localhost:8000/json/", // Updated URL
+                    pageTitle: "All Products",
+                  )
+              ),
+            );
+          } else if (item.name == "My Products") { // New condition
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ProductEntryListPage(
+                    endpointUrl: "http://localhost:8000/get-my-products/", // Placeholder URL
+                    pageTitle: "My Products",
+                  )
               ),
             );
           } else if (item.name == "Logout") {

@@ -7,35 +7,30 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 
 class ProductEntryListPage extends StatefulWidget {
-  const ProductEntryListPage({super.key});
+  final String endpointUrl;
+  final String pageTitle;
+  const ProductEntryListPage({
+    super.key,
+    required this.endpointUrl,
+    required this.pageTitle,
+  });
 
   @override
   State<ProductEntryListPage> createState() => _ProductEntryListPageState();
 }
 
 class _ProductEntryListPageState extends State<ProductEntryListPage> {
-  Future<List<ProductEntry>> fetchUserProducts(CookieRequest request) async {
-    // If the user is not logged in, return an empty list.
-    if (!request.loggedIn) {
-      return [];
-    }
+  Future<List<ProductEntry>> fetchProducts(CookieRequest request) async {
+    // Using the endpointUrl passed from the widget
+    final response = await request.get(widget.endpointUrl);
 
-    final response = await request.get('http://localhost:8000/json/');
-
-    List<ProductEntry> allProducts = [];
+    List<ProductEntry> listProducts = [];
     for (var d in response) {
       if (d != null) {
-        allProducts.add(ProductEntry.fromJson(d));
+        listProducts.add(ProductEntry.fromJson(d));
       }
     }
-
-    // Assume the user ID is stored in jsonData with the key 'pk' after login.
-    final loggedInUserId = request.jsonData?['pk'];
-    if (loggedInUserId != null) {
-      allProducts.removeWhere((product) => product.userId != loggedInUserId);
-    }
-
-    return allProducts;
+    return listProducts;
   }
 
   @override
@@ -43,25 +38,24 @@ class _ProductEntryListPageState extends State<ProductEntryListPage> {
     final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Products'),
+        // Use the pageTitle from the widget
+        title: Text(widget.pageTitle),
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
-        future: fetchUserProducts(request),
+        future: fetchProducts(request),
         builder: (context, AsyncSnapshot<List<ProductEntry>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(
+            return const Center(
               child: Text(
-                request.loggedIn
-                    ? 'You have no products yet.'
-                    : 'Please login to see your products.',
-                style: const TextStyle(fontSize: 18, color: Colors.black54),
+                "Tidak ada data produk.",
+                style: TextStyle(fontSize: 18, color: Colors.black54),
               ),
             );
           } else {
